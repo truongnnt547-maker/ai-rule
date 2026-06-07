@@ -7,6 +7,12 @@ These are generated, compiled, or dependency artifacts — not source code.
 
 ---
 
+## Version Control Internals
+
+### Directories
+
+- `.git/` — repository internals; use Git commands instead of reading or modifying directly.
+
 ## Java (Maven)
 
 ### Directories
@@ -15,6 +21,17 @@ These are generated, compiled, or dependency artifacts — not source code.
 - `.mvn/` — Maven wrapper internals
 - `target/generated-sources/` — annotation processor output
 - `target/generated-test-sources/`
+
+## Java (Gradle)
+
+### Directories
+
+- `.gradle/` — Gradle cache and metadata
+- `build/` — compiled classes and packaged artifacts
+
+### Files
+
+- `gradlew`, `gradlew.bat` — Gradle wrapper scripts; do not modify unless explicitly requested
 
 ### Files
 
@@ -56,21 +73,46 @@ These are generated, compiled, or dependency artifacts — not source code.
 - `coverage/` — Jest coverage reports
 - `.cache/` — Babel, ESLint, and bundler caches
 - `storybook-static/` — Storybook build output
+- `.turbo/` — Turborepo cache
+- `.parcel-cache/` — Parcel cache
+- `.vite/` — Vite cache
+- `.nuxt/` — Nuxt build output
+- `.svelte-kit/` — SvelteKit build output
 
 ### Files
 
 - `package-lock.json` — lockfile; never modify manually
+- `yarn.lock` — lockfile; never modify manually
+- `pnpm-lock.yaml` — lockfile; never modify manually
+- `bun.lockb` — lockfile; never modify manually
+- `bun.lock` — lockfile; never modify manually
 - `*.map` — source maps (`.js.map`, `.css.map`)
 - `*.min.js`, `*.min.css` — minified bundles
 
 ### Environment
 
+- `.env`
+- `.env.*`
 - `.env.local`
 - `.env.development.local`
 - `.env.test.local`
 - `.env.production.local`
 
 > These may contain secrets. Never read, log, or include in output.
+
+> Exception: template files such as `.env.example`, `.env.sample`, or `.env.template` may be read if needed and should not contain secrets.
+
+## Secrets and Credentials
+
+- `*.pem`
+- `*.key`
+- `*.p12`
+- `*.pfx`
+- `id_rsa`, `id_dsa`, `id_ecdsa`, `id_ed25519`
+- `credentials.json`
+- `secrets.json`
+
+These may contain credentials. Never read, log, summarize, or include them in context.
 
 ---
 
