@@ -13,6 +13,14 @@ Minimize context usage and avoid repeatedly loading large files.
 - Summarize findings before moving to the next step.
 - Reuse previous analysis instead of rereading files.
 
+## Context Checkpoint
+
+Before opening additional files:
+
+- Check if the current context already answers the question.
+- Check if CodeGraph or Code Review Graph can provide the answer.
+- Stop expanding context once you can complete the current task.
+
 ## Defining Relevant Sections
 
 A section is relevant if it:

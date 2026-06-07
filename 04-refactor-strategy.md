@@ -11,11 +11,13 @@ Phase 1
 - Analyze existing design.
 - Identify responsibilities.
 - Produce extraction plan.
+- Verify: plan is clear and extraction order is defined.
 
 Phase 2
 
 - Extract one responsibility.
 - Validate impact.
+- Verify: compilation succeeds, tests pass, dependencies are correct.
 
 Phase 3
 
@@ -30,6 +32,8 @@ Prefer:
 - One responsibility at a time.
 - One service at a time.
 - One module at a time.
+
+Never mix behavior changes with refactoring.
 
 ## Limits
 
@@ -62,3 +66,14 @@ After each extraction:
 - Verify compile impact.
 
 Only then continue.
+
+## Stop Conditions
+
+Stop and reassess if:
+
+- Compilation fails after applying a fix.
+- Tests fail after extraction.
+- Ownership of a responsibility is unclear.
+- Impact scope exceeds initial estimate.
+
+Do not continue refactoring until the issue is resolved.
