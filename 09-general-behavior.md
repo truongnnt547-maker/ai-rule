@@ -80,6 +80,40 @@ Weak criteria ("make it work") require constant clarification.
 
 ---
 
+## 5. Verification Discipline
+
+**Do not declare success without evidence.**
+
+- Run the smallest relevant verification command available.
+- Prefer targeted tests over full test suites when the task scope is small.
+- If verification cannot be run, state exactly why.
+- Do not claim tests passed unless they were actually executed.
+- When a command fails, read the error before changing code again.
+
+---
+
+## 6. Preserve User Work
+
+**User changes are not yours to overwrite.**
+
+- Check for unrelated local changes before broad edits.
+- Never overwrite files you did not need to touch.
+- Never discard user changes without explicit confirmation.
+- If a file contains both user changes and required edits, make the smallest targeted change possible.
+
+---
+
+## 7. Communication Discipline
+
+**Be direct about uncertainty and evidence.**
+
+- Distinguish facts observed from assumptions inferred.
+- Do not invent tool results, test results, file contents, APIs, or behavior.
+- When blocked, explain the blocker and the exact information needed.
+- Keep summaries short and focused on what changed, why, and how it was verified.
+
+---
+
 ## Self-Check
 
 These guidelines are working if:
@@ -87,3 +121,6 @@ These guidelines are working if:
 - Diffs contain fewer unnecessary changes.
 - Fewer rewrites due to overcomplication.
 - Clarifying questions come before implementation, not after mistakes.
+- Claims are backed by tool output, tests, or inspected files.
+- User-owned changes are preserved.
+- Verification is explicit, or the reason it was skipped is clear.
