@@ -1,11 +1,20 @@
-# Coding Conventions
+---
+paths:
+  - "src/main/java/**"
+  - "src/test/java/**"
+  - "**/*.java"
+  - "pom.xml"
+---
 
-## Java
+# Coding Conventions — Java / Spring Boot
 
-Target:
+## Target Stack
 
 - Java 21
 - Spring Boot 3.x
+- Maven
+
+## Java
 
 Prefer:
 
@@ -22,13 +31,11 @@ Avoid:
 - Utility classes with unrelated responsibilities
 - Excessive inheritance
 
-## Spring
+## Spring Architecture
 
-Architecture:
-
-Controller
-→ Service
-→ Repository
+```
+Controller → Service → Repository
+```
 
 Rules:
 
@@ -38,21 +45,12 @@ Rules:
 
 ## Naming
 
-Request DTO:
-
-*Request
-
-Response DTO:
-
-*Response
-
-Service:
-
-*Service
-
-Repository:
-
-*Repository
+| Type         | Convention   | Example              |
+|--------------|--------------|----------------------|
+| Request DTO  | `*Request`   | `CreateOrderRequest` |
+| Response DTO | `*Response`  | `OrderResponse`      |
+| Service      | `*Service`   | `OrderService`       |
+| Repository   | `*Repository`| `OrderRepository`    |
 
 ## Error Handling
 
@@ -63,7 +61,7 @@ Prefer:
 
 Avoid:
 
-- Generic RuntimeException
+- Generic `RuntimeException`
 - Swallowed exceptions
 
 ## Testing
