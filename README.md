@@ -21,6 +21,8 @@ A collection of reusable `.clinerules` guidance for AI-assisted software enginee
 | [`07-git-discipline.md`](07-git-discipline.md) | Clean commit history: format, separation, and checkpoint rules |
 | [`08-ignore-files.md`](08-ignore-files.md) | Files and directories the agent should never read, scan, or modify |
 | [`09-general-behavior.md`](09-general-behavior.md) | Overarching principles: simplicity, surgical changes, goal-driven execution |
+| [`10-security-and-privacy.md`](10-security-and-privacy.md) | Security checks: secrets handling, authn/z, validation, common web vulns, crypto, logging |
+| [`11-dependency-and-build-discipline.md`](11-dependency-and-build-discipline.md) | Safe dependency/build changes: approval, lockfiles, validation, CI/config scope |
 
 ## Usage
 
@@ -33,6 +35,7 @@ Place these files inside a `.clinerules/` directory at the root of your reposito
 3. **03-large-file-handling.md**, **04-refactor-strategy.md** — Apply during refactoring tasks
 4. **05-coding-conventions-java.md**, **05-coding-conventions-react.md** — Automatically scoped to Java/React files via frontmatter `paths:`
 5. **07-git-discipline.md**, **08-ignore-files.md**, **09-general-behavior.md** — Always active
+6. **10-security-and-privacy.md**, **11-dependency-and-build-discipline.md** — Always active
 
 ## Key Principles
 

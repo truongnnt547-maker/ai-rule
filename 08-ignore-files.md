@@ -89,6 +89,18 @@ These are generated, compiled, or dependency artifacts — not source code.
 - `*.map` — source maps (`.js.map`, `.css.map`)
 - `*.min.js`, `*.min.css` — minified bundles
 
+## Python / Tooling Caches
+
+### Directories
+
+- `.venv/`
+- `venv/`
+- `__pycache__/`
+- `.pytest_cache/`
+- `.ruff_cache/`
+- `.mypy_cache/`
+- `.tox/`
+
 ### Environment
 
 - `.env`
