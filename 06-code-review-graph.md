@@ -5,6 +5,16 @@
 Use Code Review Graph MCP to understand repository structure,
 change impact, and review scope before reading source files.
 
+## Preconditions
+
+Use this rule only when the `code-review-graph` MCP server is available.
+
+If Code Review Graph is unavailable, disabled, or uninitialized:
+
+- Do not invent graph results.
+- Fall back to targeted `search_files` / `read_file` usage.
+- Avoid repository-wide scans.
+
 ## Scope
 
 Use Code Review Graph for:
@@ -43,11 +53,15 @@ Use CodeGraph for symbol navigation and references.
 
 For any non-trivial task:
 
-1. onboard_developer
-2. detect_changes_tool
-3. get_minimal_context_tool
+1. Build or update the graph only if it is missing or stale.
+2. Run `get_minimal_context_tool` first.
+3. Use `detect_changes_tool` when reviewing existing diffs or after making changes.
+4. Use `get_impact_radius_tool` when changed files or refactor targets are known.
 
-Only after that:
+If an onboarding prompt or tool is available, use it for unfamiliar repositories.
+Otherwise, start with `get_minimal_context_tool` and architecture overview tools.
+
+Only after graph context is sufficient:
 
 - read files
 - modify code
@@ -57,9 +71,10 @@ Only after that:
 
 Before refactoring:
 
-1. detect_changes_tool
-2. get_minimal_context_tool
-3. get_impact_radius_tool
+1. Run `get_minimal_context_tool`.
+2. Identify the target files, classes, or modules.
+3. Run `get_impact_radius_tool` when targets are known.
+4. Run `detect_changes_tool` after modifications or when reviewing an existing diff.
 
 Identify:
 
@@ -99,9 +114,15 @@ Avoid:
 
 ## Change Analysis
 
-Before modifying existing code:
+When reviewing existing changes:
 
-Run detect_changes_tool.
+- Run `detect_changes_tool`.
+- Analyze affected files, flows, communities, and test coverage gaps.
+
+Before planned non-trivial modifications:
+
+- Run `get_minimal_context_tool` first.
+- Use impact analysis when target files or modules are known.
 
 If impact is high:
 
@@ -115,7 +136,8 @@ before editing.
 
 For unfamiliar repositories:
 
-1. onboard_developer
-2. get_minimal_context_tool
+1. Run `get_minimal_context_tool`.
+2. Use architecture overview or community tools when available.
+3. Use onboarding prompts only if exposed by the MCP server.
 
-Use these tools before opening source files.
+Use graph context before opening source files.

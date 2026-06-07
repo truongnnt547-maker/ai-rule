@@ -28,12 +28,12 @@ Prefer:
 - Functional components with hooks
 - Single responsibility per component
 - Custom hooks for reusable logic extraction
-- Named exports for components (default export only for pages)
+- Named exports for components, except where framework conventions require default exports
 
 Avoid:
 
 - Class components
-- Prop drilling beyond 2 levels (use context or state manager)
+- Excessive prop drilling when it harms readability; prefer composition, context, or a state manager when it simplifies data flow
 - Mixing UI logic with business logic in one component
 - Inline styles (prefer CSS modules or utility classes)
 
@@ -62,9 +62,23 @@ src/features/order/
 
 ## State Management
 
-- Local UI state: `useState`
-- Shared/server state: context, Zustand, or React Query
-- Do not put server data in global client state unless necessary
+- Local UI state: `useState`.
+- Shared client state: context or Zustand when local state is insufficient.
+- Server/cache state: React Query or equivalent data-fetching cache.
+- Do not put server data in global client state unless necessary.
+
+## TypeScript
+
+Prefer:
+
+- Explicit prop types for components.
+- Narrow types over broad types.
+- Separate API DTO types from UI view models when their shapes diverge.
+
+Avoid:
+
+- `any` unless there is a documented reason.
+- Duplicating type definitions across features.
 
 ## Error Handling
 

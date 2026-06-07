@@ -43,6 +43,13 @@ Rules:
 - Services contain business logic.
 - Repositories contain persistence logic.
 
+## Transactions
+
+- Define transaction boundaries at the Service layer.
+- Avoid transactions in controllers.
+- Keep transactional methods focused on one business operation.
+- Prefer read-only transactions for query-only service methods when appropriate.
+
 ## Naming
 
 | Type         | Convention   | Example              |
@@ -56,13 +63,15 @@ Rules:
 
 Prefer:
 
-- Domain-specific exceptions
-- Consistent error responses
+- Domain-specific exceptions.
+- Consistent error responses.
+- Centralized API error mapping with `@ControllerAdvice` where appropriate.
 
 Avoid:
 
-- Generic `RuntimeException`
-- Swallowed exceptions
+- Generic `RuntimeException` for business errors.
+- Swallowed exceptions.
+- Returning raw exception messages to API clients.
 
 ## Testing
 
@@ -79,10 +88,11 @@ Prefer:
 
 Rules:
 
-- Each public Service method must have at least one unit test.
+- Public Service behavior must be covered by unit tests.
+- Avoid testing trivial pass-through methods unless they contain business logic.
 - Test only behavior, not implementation details.
 - Do not mock the class under test.
-- Use `@MockBean` only in integration tests, not unit tests.
+- Use Spring test mock-bean annotations only in integration or slice tests, not pure unit tests.
 
 Avoid:
 
