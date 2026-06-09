@@ -1,13 +1,26 @@
----
 paths:
-  - "**/*"
+  - "**/security/**"
+  - "**/auth/**"
+  - "**/*Security*"
+  - "**/*Auth*"
+  - "**/*Token*"
+  - "**/*Password*"
+  - "**/*Jwt*"
+  - "**/*Permission*"
+  - "**/*Login*"
 ---
 
 # Security and Privacy
 
 ## Goal
 
-Prevent security regressions and sensitive-data leaks. Apply these checks before implementing changes.
+Prevent security regressions and sensitive-data leaks without replacing graph-first repository understanding.
+
+## Relationship to `00-tool-routing.md`
+
+Apply these security checks after the tool-routing gate has selected the right context path.
+
+Do not use this always-active security rule as a reason to skip CodeGraph or Code Review Graph for non-trivial code understanding, refactoring, review, or impact analysis tasks.
 
 ## Secrets and Sensitive Data
 

@@ -2,16 +2,22 @@
 
 ## Goal
 
-Use Code Review Graph MCP to understand repository structure,
-change impact, and review scope before reading source files.
+Use Code Review Graph MCP to understand repository structure, change impact, blast radius, and review scope before reading source files.
+
+## Relationship to `00-tool-routing.md`
+
+`00-tool-routing.md` decides when Code Review Graph must be considered. This file defines the detailed Code Review Graph workflow once that routing decision is made.
+
+Do not duplicate this whole workflow into always-active rules; keep the always-active gate short.
 
 ## Preconditions
 
-Use this rule only when the `code-review-graph` MCP server is available.
+Use this rule only when the `code-review-graph` MCP server is available in the tool list.
 
 If Code Review Graph is unavailable, disabled, or uninitialized:
 
 - Do not invent graph results.
+- State the reason for skipping Code Review Graph.
 - Fall back to targeted `search_files` / `read_file` usage.
 - Avoid repository-wide scans.
 
@@ -21,123 +27,90 @@ Use Code Review Graph for:
 
 - Change impact analysis and blast radius.
 - Architecture and module overview.
-- Identifying affected services, controllers, repositories, DTOs.
+- Review scope for diffs or local changes.
+- Refactor planning across files/modules.
+- Identifying affected services, controllers, repositories, DTOs, components, tests, and downstream dependencies.
 - Developer onboarding to an unfamiliar repository.
 
-Do NOT use Code Review Graph for symbol navigation or reference tracing.
-For symbol-level analysis, use CodeGraph (see `02-codegraph-first.md`).
+Do not use Code Review Graph for symbol navigation, caller/callee lookup, or reference tracing. Use CodeGraph for symbol-level analysis.
 
 ## When To Use
 
-Use Code Review Graph before:
+Use Code Review Graph before manual source reads/searches for non-trivial tasks involving:
 
-- Refactoring existing code
-- Reviewing code changes
-- Investigating large repositories
-- Understanding unfamiliar modules
-- Estimating change impact
-- Finding affected services, controllers, repositories, DTOs
-- Analyzing blast radius
-- Developer onboarding
+- Refactoring existing code.
+- Reviewing code changes.
+- Investigating large or unfamiliar repositories.
+- Understanding unfamiliar modules.
+- Estimating change impact.
+- Analyzing architecture, coupling, or blast radius.
+- Finding affected files, modules, services, components, or tests.
 
-Do not use it for:
+For simple syntax fixes, small local edits, documentation-only changes, or symbol-level navigation, Code Review Graph is optional unless impact scope is unclear.
 
-- Simple syntax fixes
-- Small local edits
-- Reading implementation details
-- Symbol-level navigation
+## Tool Selection
 
-Use CodeGraph for symbol navigation and references.
+Prefer tools in this order:
+
+1. `get_minimal_context_tool` — first call for non-trivial review/refactor/architecture tasks.
+2. `detect_changes_tool` — review existing diffs or validate changes after editing.
+3. `get_impact_radius_tool` — analyze known changed files or refactor targets.
+4. `get_review_context_tool` — focused review context when source snippets are needed.
+5. Architecture/community/flow tools — only when the task specifically requires that view.
+
+Build or update the graph only if it is missing or stale.
 
 ## Initial Workflow
 
-For any non-trivial task:
+For non-trivial repository-level tasks:
 
-1. Build or update the graph only if it is missing or stale.
-2. Run `get_minimal_context_tool` first.
-3. Use `detect_changes_tool` when reviewing existing diffs or after making changes.
-4. Use `get_impact_radius_tool` when changed files or refactor targets are known.
-
-If an onboarding prompt or tool is available, use it for unfamiliar repositories.
-Otherwise, start with `get_minimal_context_tool` and architecture overview tools.
-
-Only after graph context is sufficient:
-
-- read files
-- modify code
-- run refactoring
+1. Run `get_minimal_context_tool` first.
+2. Identify changed files, target modules, or refactor targets.
+3. Run `get_impact_radius_tool` when targets are known.
+4. Run `detect_changes_tool` for existing diffs or after modifications.
+5. Only then read files, modify code, or run refactoring.
 
 ## Refactoring Workflow
 
 Before refactoring:
 
 1. Run `get_minimal_context_tool`.
-2. Identify the target files, classes, or modules.
+2. Identify target files, classes, modules, and likely downstream dependencies.
 3. Run `get_impact_radius_tool` when targets are known.
-4. Run `detect_changes_tool` after modifications or when reviewing an existing diff.
+4. Create a focused extraction or modification plan.
+5. Refactor one responsibility at a time.
+6. Run `detect_changes_tool` after modifications when reviewing impact is useful.
 
 Identify:
 
-- impacted modules
-- affected classes
-- downstream dependencies
-- potential regressions
-
-Only then begin implementation.
+- Impacted modules.
+- Affected classes/components/services/controllers/repositories/DTOs.
+- Downstream dependencies.
+- Potential regression areas.
+- Relevant tests or test coverage gaps.
 
 ## Large Class Refactoring
 
 When refactoring classes larger than 300 lines:
 
-1. get_minimal_context_tool
-2. identify responsibilities
-3. identify impacted classes
-4. create extraction plan
-5. refactor one responsibility at a time
+1. Run `get_minimal_context_tool`.
+2. Identify responsibilities.
+3. Identify impacted classes/modules.
+4. Create an extraction plan.
+5. Extract one responsibility at a time.
+6. Validate impact before continuing.
 
 Never immediately rewrite a large class.
 
 ## Context Reduction
 
-Always prefer:
+Prefer compact graph tools before reading large files:
 
-- get_minimal_context_tool
-- get_review_context_tool
-
-before reading large files.
+- `get_minimal_context_tool`.
+- `get_review_context_tool` with minimal detail when source snippets are needed.
 
 Avoid:
 
-- repository-wide scans
-- loading many files at once
-- rereading the same file repeatedly
-
-## Change Analysis
-
-When reviewing existing changes:
-
-- Run `detect_changes_tool`.
-- Analyze affected files, flows, communities, and test coverage gaps.
-
-Before planned non-trivial modifications:
-
-- Run `get_minimal_context_tool` first.
-- Use impact analysis when target files or modules are known.
-
-If impact is high:
-
-- analyze blast radius
-- analyze dependent modules
-- analyze affected tests
-
-before editing.
-
-## Architecture Discovery
-
-For unfamiliar repositories:
-
-1. Run `get_minimal_context_tool`.
-2. Use architecture overview or community tools when available.
-3. Use onboarding prompts only if exposed by the MCP server.
-
-Use graph context before opening source files.
+- Repository-wide scans.
+- Loading many files at once.
+- Rereading the same file repeatedly.

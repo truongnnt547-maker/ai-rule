@@ -3,10 +3,15 @@ paths:
   - "src/main/java/**"
   - "src/test/java/**"
   - "**/*.java"
-  - "pom.xml"
 ---
 
 # Coding Conventions — Java / Spring Boot
+
+## Relationship to `00-tool-routing.md`
+
+Apply these Java conventions after the tool-routing gate has selected the right context path.
+
+Do not use coding conventions as a reason to skip CodeGraph or Code Review Graph for non-trivial code understanding, refactoring, review, or impact analysis tasks.
 
 ## Target Stack
 

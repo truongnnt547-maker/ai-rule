@@ -11,10 +11,15 @@ paths:
   - "src/types/**"
   - "**/*.tsx"
   - "**/*.jsx"
-  - "package.json"
 ---
 
 # Coding Conventions — ReactJS / npm
+
+## Relationship to `00-tool-routing.md`
+
+Apply these React conventions after the tool-routing gate has selected the right context path.
+
+Do not use coding conventions as a reason to skip CodeGraph or Code Review Graph for non-trivial code understanding, refactoring, review, or impact analysis tasks.
 
 ## Target Stack
 
