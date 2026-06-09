@@ -1,13 +1,29 @@
----
 paths:
-  - "**/*"
+  - "package.json"
+  - "pom.xml"
+  - "build.gradle"
+  - "build.gradle.kts"
+  - "settings.gradle"
+  - "settings.gradle.kts"
+  - "vite.config.*"
+  - "webpack.config.*"
+  - "tsconfig.json"
+  - "Dockerfile"
+  - "docker-compose*.yml"
+  - ".github/workflows/**"
 ---
 
 # Dependency and Build Discipline
 
 ## Goal
 
-Control dependency changes, lockfiles, and build/config updates to avoid supply-chain and stability issues.
+Control dependency changes, lockfiles, and build/config updates without replacing graph-first repository understanding.
+
+## Relationship to `00-tool-routing.md`
+
+Apply these dependency/build checks after the tool-routing gate has selected the right context path.
+
+Do not use this always-active dependency rule as a reason to skip CodeGraph or Code Review Graph for non-trivial code understanding, refactoring, review, or impact analysis tasks.
 
 ## Installing or Updating Dependencies
 

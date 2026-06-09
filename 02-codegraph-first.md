@@ -2,15 +2,25 @@
 
 ## Goal
 
-Use CodeGraph MCP as the primary source of repository understanding.
+Use CodeGraph MCP as the primary source for symbol-level repository understanding.
+
+## Relationship to `00-tool-routing.md`
+
+`00-tool-routing.md` decides when CodeGraph must be considered. This file defines the detailed CodeGraph workflow once that routing decision is made.
+
+Do not duplicate this whole workflow into always-active rules; keep the always-active gate short.
 
 ## Preconditions
 
-Use this rule only when the `codegraph` MCP server is available and the current project has been initialized/indexed.
+Use this rule only when:
+
+- The `codegraph` MCP server is available in the tool list.
+- The current project has been initialized/indexed, or index status can be checked safely.
 
 If CodeGraph is unavailable, disabled, or unindexed:
 
 - Do not invent graph results.
+- State the reason for skipping CodeGraph.
 - Fall back to targeted `search_files` / `read_file` usage.
 - Avoid repository-wide scans.
 
@@ -19,60 +29,58 @@ If CodeGraph is unavailable, disabled, or unindexed:
 Use CodeGraph for:
 
 - Symbol lookup and navigation.
-- Reference tracing (who calls this method).
-- Dependency graph between classes.
-- Impact analysis at symbol level.
+- Caller/callee/reference tracing.
+- Execution-flow and bug-path investigation.
+- Dependency graph between functions, classes, components, hooks, and modules.
+- Symbol-level impact analysis before changing a function, method, class, component, or hook.
 
-Do NOT use CodeGraph as a replacement for Code Review Graph.
-For change impact, blast radius, and architecture overview, use `06-code-review-graph.md` first.
+Do not use CodeGraph as a replacement for Code Review Graph. For change impact, blast radius, architecture overview, or review scope, use `06-code-review-graph.md` first.
 
 ## When To Use
 
-Use CodeGraph before non-trivial edits, behavior changes, refactoring, unfamiliar-code investigation, and symbol-level dependency analysis.
+Use CodeGraph before manual source reads/searches for non-trivial tasks involving:
 
-For trivial typo, formatting, or single-line syntax fixes, CodeGraph is optional.
+- Understanding how a feature or code path works.
+- Finding where a symbol is defined or used.
+- Tracing what calls or is called by a symbol.
+- Debugging behavior in unfamiliar code.
+- Refactoring a known symbol.
+
+For typo, formatting, documentation-only, or single-line local fixes, CodeGraph is optional.
 
 ## Tool Selection
 
 Prefer tools in this order:
 
-1. `codegraph_explore` — first choice for understanding an area or flow.
-2. `codegraph_search` — quick symbol lookup by name.
-3. `codegraph_node` — full details for one known symbol.
-4. `codegraph_callers` / `codegraph_callees` — direct reference tracing.
-5. `codegraph_impact` — symbol-level impact before refactoring.
-6. `codegraph_files` / `codegraph_status` — project/index diagnostics only.
+1. `codegraph_context` — primary tool for broad task context.
+2. `codegraph_explore` — inspect related symbols/files when names or code terms are known.
+3. `codegraph_search` — quick symbol lookup by name.
+4. `codegraph_node` — details for one known symbol.
+5. `codegraph_callers` / `codegraph_callees` — direct reference tracing.
+6. `codegraph_impact` — symbol-level impact before refactoring.
+7. `codegraph_files` / `codegraph_status` — project/index diagnostics only.
 
 ## Workflow
 
-Before non-trivial edits:
+Before non-trivial symbol-level edits:
 
-1. Find symbol.
-2. Find references.
-3. Identify dependencies.
-4. Identify impacted classes.
-5. Create modification plan.
+1. Identify the project root and pass it as `projectPath` when supported.
+2. Find the target symbol or relevant flow.
+3. Inspect callers, callees, and dependencies.
+4. Estimate impacted symbols/classes/files.
+5. Create a focused modification plan.
+6. Only then read or edit source files.
 
-Only then begin editing.
-
-## Rules
-
-- Prefer CodeGraph over manual file scanning.
-- Prefer symbol search over reading directories.
-- Prefer reference analysis over repository-wide search.
-- Do not read entire files when symbol-level information is sufficient.
-- Never read generated, dependency, or build artifacts listed in `08-ignore-files.md`.
-
-### Fallback Strategy
+## Fallback Strategy
 
 If a symbol is not found:
 
-1. Verify project path is correct.
+1. Verify `projectPath` is correct.
 2. Check index status with `codegraph_status`.
-3. If index is stale or project unindexed, use targeted `search_files` or `read_file`.
+3. If the index is stale or the project is unindexed, use targeted `search_files` / `read_file`.
 4. Do not fall back to repository-wide scans.
 
-### Project Path
+## Project Path
 
 - [CRITICAL] When invoking any CodeGraph tool that supports `projectPath`, always provide `projectPath`.
 - [CRITICAL] Obtain the project root from the current workspace, MCP onboarding data, repository metadata, or previous tool results.
@@ -81,11 +89,11 @@ If a symbol is not found:
 
 ## Refactoring
 
-Before refactoring:
+Before refactoring a symbol:
 
-- Build dependency graph.
 - Identify incoming references.
 - Identify outgoing dependencies.
-- Estimate impact scope.
+- Estimate symbol-level impact.
+- Keep the change surgical.
 
 Never refactor blindly.
