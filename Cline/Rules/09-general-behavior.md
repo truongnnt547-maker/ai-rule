@@ -90,6 +90,22 @@ Weak criteria ("make it work") require constant clarification.
 - Do not claim tests passed unless they were actually executed.
 - When a command fails, read the error before changing code again.
 
+### After Writing Tests
+
+After writing or modifying any test file:
+
+1. Compile the test first — do not assume it compiles.
+   - Java/Maven: `mvn test-compile -pl <module>` or `mvn compile test-compile`
+   - React: `tsc --noEmit`
+2. Fix all compile errors before running tests. Common causes:
+   - Missing imports for the class under test.
+   - Missing imports for mocking libraries (Mockito, AssertJ, etc.).
+   - Wrong package declaration.
+3. Run only the affected test: `mvn test -Dtest=ClassName -pl <module>`.
+4. Only after the test passes, continue to the next task.
+
+Never write a test and move on without compiling and running it.
+
 ---
 
 ## 6. Preserve User Work
