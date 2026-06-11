@@ -84,27 +84,12 @@ Weak criteria ("make it work") require constant clarification.
 
 **Do not declare success without evidence.**
 
-- Run the smallest relevant verification command available.
-- Prefer targeted tests over full test suites when the task scope is small.
+- Do NOT run tests, builds, or linters automatically after completing a task.
+- Only run tests or builds when explicitly asked by the user.
+- A task is considered done when the code changes are made.
 - If verification cannot be run, state exactly why.
 - Do not claim tests passed unless they were actually executed.
 - When a command fails, read the error before changing code again.
-
-### After Writing Tests
-
-After writing or modifying any test file:
-
-1. Compile the test first — do not assume it compiles.
-   - Java/Maven: `mvn test-compile -pl <module>` or `mvn compile test-compile`
-   - React: `tsc --noEmit`
-2. Fix all compile errors before running tests. Common causes:
-   - Missing imports for the class under test.
-   - Missing imports for mocking libraries (Mockito, AssertJ, etc.).
-   - Wrong package declaration.
-3. Run only the affected test: `mvn test -Dtest=ClassName -pl <module>`.
-4. Only after the test passes, continue to the next task.
-
-Never write a test and move on without compiling and running it.
 
 ---
 
