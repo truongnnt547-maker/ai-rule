@@ -45,6 +45,13 @@ The MCP server returns "not initialized." Ask the user: *"I notice this project 
 ### Boundary with code-review-graph (STRICT HIERARCHY)
 - **ALWAYS prefer `codegraph` for:** Core development tasks, code navigation, symbol lookups, call hierarchies (`callers`/`callees`), deep flow tracing (`codegraph_trace`), and structural impact analysis (`codegraph_impact`).
 - **DO NOT use `codegraph` for:** Git pull request audits, change risk scoring, or test coverage mapping. Delegate those strictly to `code-review-graph`.
-- **Rule of Thumb:** 
+- **Rule of Thumb:**
   - If the user asks *"How does this feature/system work?"* or *"What does this break structurally?"* $\rightarrow$ Use `codegraph`.
   - If the user asks *"Review my current git changes"* or *"What are the risks of my PR?"* $\rightarrow$ Use `code-review-graph`.
+
+### Boundary with Spring Tools (STRICT HIERARCHY)
+- **DO NOT use `codegraph` for:** Bean lookups, DI wiring, stereotype/component discovery, REST endpoint mapping, or Spring diagnostics. Delegate those strictly to Spring Tools.
+- **ALWAYS prefer `codegraph` for:** Internal method logic, call hierarchies inside a class, cross-module structural tracing, and impact analysis — after Spring Tools has already identified the target bean/class.
+- **Rule of Thumb:**
+  - If the user asks *"What beans implement X?"* or *"Which controller handles this endpoint?"* $\rightarrow$ Use Spring Tools.
+  - If the user asks *"What does this method call internally?"* or *"What breaks if I change this class?"* $\rightarrow$ Use `codegraph`.
