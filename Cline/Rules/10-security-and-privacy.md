@@ -1,3 +1,4 @@
+---
 paths:
   - "**/security/**"
   - "**/auth/**"
@@ -16,9 +17,9 @@ paths:
 
 Prevent security regressions and sensitive-data leaks without replacing graph-first repository understanding.
 
-## Relationship to `00-tool-routing.md`
+## Relationship to the graph-first workflow
 
-Apply these security checks after the tool-routing gate has selected the right context path.
+Apply these security checks after selecting the relevant context path.
 
 Do not use this always-active security rule as a reason to skip CodeGraph or Code Review Graph for non-trivial code understanding, refactoring, review, or impact analysis tasks.
 

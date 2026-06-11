@@ -66,31 +66,27 @@ For typo, formatting, documentation-only, or single-line local fixes, CodeGraph 
 | "Where is X defined?" / "Find symbol named X" | `codegraph_search` |
 | "What calls Y?" | `codegraph_callers` |
 | "What does Y call?" | `codegraph_callees` |
-| "How does X reach Y? / trace flow from X to Y" | `codegraph_trace` |
+| "How does X reach Y? / trace flow from X to Y" | `codegraph_callers` / `codegraph_callees` |
 | "What would break if I changed Z?" | `codegraph_impact` |
 | "Show Y's signature / source / docstring" | `codegraph_node` |
-| "Give me focused context for a task/area" | `codegraph_context` |
 | "See several related symbols' source at once" | `codegraph_explore` |
 | "What files exist under path/" | `codegraph_files` |
 | "Is the index healthy?" | `codegraph_status` |
 
 Prefer tools in this order for common tasks:
 
-1. `codegraph_context` — broad task context first.
-2. `codegraph_trace` — for flow questions ("how does X reach Y"), one call returns the whole path including dynamic hops.
-3. `codegraph_explore` — inspect several related symbols' source in one call.
-4. `codegraph_search` — quick symbol lookup by name.
-5. `codegraph_node` — details for one known symbol.
-6. `codegraph_callers` / `codegraph_callees` — direct reference tracing.
-7. `codegraph_impact` — symbol-level impact before refactoring.
-8. `codegraph_files` / `codegraph_status` — diagnostics only.
+1. `codegraph_search` — quick symbol lookup by name.
+2. `codegraph_explore` — inspect several related symbols' source in one call.
+3. `codegraph_node` — details for one known symbol.
+4. `codegraph_callers` / `codegraph_callees` — direct reference tracing.
+5. `codegraph_impact` — symbol-level impact before refactoring.
+6. `codegraph_files` / `codegraph_status` — diagnostics only.
 
 ## Anti-Patterns
 
 - **Don't grep first** when looking up a symbol by name — `codegraph_search` is faster and returns kind + location + signature in one call.
-- **Don't chain `codegraph_search` + `codegraph_node`** for context — use `codegraph_context` instead (one call).
 - **Don't loop `codegraph_node` over many symbols** — use one `codegraph_explore` call instead; looping re-reads context and costs far more.
-- **Don't rebuild a flow path manually** with `codegraph_search` + `codegraph_callers` — use `codegraph_trace` from→to, which returns the whole path including async/callback/JSX hops in one call.
+- **Don't rebuild a flow path manually** with `codegraph_search` + `codegraph_callers` + `codegraph_callees` unless you need direct reference tracing; use the fewest calls needed for the question.
 - **Don't re-verify codegraph results with grep** — results come from a full AST parse and are authoritative.
 
 ## Index Staleness
@@ -107,7 +103,7 @@ When a codegraph response starts with `"⚠️ Some files referenced below were 
 Before non-trivial symbol-level edits:
 
 1. Identify the project root and pass it as `projectPath` when supported.
-2. Find the target symbol or relevant flow (`codegraph_context` or `codegraph_trace`).
+2. Find the target symbol or relevant flow (`codegraph_search`, then `codegraph_callers` / `codegraph_callees` as needed).
 3. Inspect callers, callees, and dependencies.
 4. Estimate impacted symbols/classes/files.
 5. Create a focused modification plan.

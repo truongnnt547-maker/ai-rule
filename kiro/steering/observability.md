@@ -38,7 +38,7 @@ When tasked with investigating a bug or an error, strictly follow this execution
 ### Step 2: Locate in Source (using `codegraph`)
 - Take the Class/Method identified in Step 1 and use `codegraph_search` to find its definition.
 - DO NOT use `grep` or file reads to find the file mentioned in the stack trace.
-- Use `codegraph_trace` if the error involves a broken asynchronous flow (e.g., a message consumed from Kafka failing mid-process, or a CMMN lifecycle listener breaking).
+- Use `codegraph_callers` and `codegraph_callees` to follow a broken asynchronous flow, then `codegraph_explore` for the involved symbols (e.g., a message consumed from Kafka failing mid-process, or a CMMN lifecycle listener breaking).
 
 ### Step 3: Assess Risk (using `code-review-graph`)
 - BEFORE writing the fix, run `get_impact_radius` on the intended modification point.

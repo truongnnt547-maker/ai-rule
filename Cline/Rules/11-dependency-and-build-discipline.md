@@ -1,3 +1,4 @@
+---
 paths:
   - "package.json"
   - "pom.xml"
@@ -19,9 +20,9 @@ paths:
 
 Control dependency changes, lockfiles, and build/config updates without replacing graph-first repository understanding.
 
-## Relationship to `00-tool-routing.md`
+## Relationship to the graph-first workflow
 
-Apply these dependency/build checks after the tool-routing gate has selected the right context path.
+Apply these dependency/build checks after selecting the relevant context path.
 
 Do not use this always-active dependency rule as a reason to skip CodeGraph or Code Review Graph for non-trivial code understanding, refactoring, review, or impact analysis tasks.
 
@@ -44,8 +45,10 @@ Do not use this always-active dependency rule as a reason to skip CodeGraph or C
 
 ## Validation After Dependency/Build Changes
 
-- Run the smallest relevant checks (e.g., targeted tests, `npm test -- <scope>`, or `mvn -pl <module> test`) after dependency or build config changes.
-- If validation cannot be run, state why and what should be run by the user.
+- Recommend the smallest relevant checks after dependency or build config changes.
+- Compile/build checks may run automatically when they are the relevant verification step.
+- Run targeted tests (e.g., `npm test -- <scope>` or `mvn -pl <module> test`) only after explicit user confirmation.
+- If validation is not run, state why and what should be run by the user.
 
 ## Security and Maintenance
 

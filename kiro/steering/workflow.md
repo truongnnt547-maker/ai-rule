@@ -11,6 +11,7 @@ description: Workflow rules — control agent behavior during tasks
 
 ### Test Execution
 - Do NOT run tests automatically after completing a task
+- Compile/build checks may run automatically when they are the relevant verification step
 - Only run tests when explicitly asked by the user
 - Do NOT verify changes by running the test suite unless instructed
 

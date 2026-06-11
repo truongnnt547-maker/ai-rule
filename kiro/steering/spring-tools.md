@@ -63,7 +63,7 @@ When following the observability triage pipeline and a stack trace mentions a Sp
 
 1. **Step 1 (Isolate):** `vietcap` to get the stack trace as usual.
 2. **Step 1.5 (Spring context):** Before jumping to `codegraph_search`, run `getBeanUsageInfo` on the faulting class — confirms injection points and wiring. Also run `getProjectDiagnostics` to catch any pre-existing config errors that may be the root cause.
-3. **Step 2 (Locate):** Then use `codegraph_node` / `codegraph_trace` for logic-level analysis.
+3. **Step 2 (Locate):** Then use `codegraph_node` / `codegraph_search` / `codegraph_callers` / `codegraph_callees` for logic-level analysis.
 4. **Steps 3–4:** Proceed with `code-review-graph` and fix as normal.
 
 ---

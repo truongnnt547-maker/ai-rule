@@ -57,7 +57,7 @@ When investigating a bug or error, follow this order strictly:
 
 - Use `codegraph_search` to find the class/method identified in Step 1.
 - If the error involves a broken async flow (Kafka mid-process, CMMN lifecycle listener),
-  use `codegraph_trace` to trace the full path.
+  use `codegraph_callers` and `codegraph_callees` to follow the path, then `codegraph_explore` for the involved symbols.
 - Do NOT use grep or file reads to find the file mentioned in the stack trace.
 
 ### Step 3 — Assess Risk (`code-review-graph`)
