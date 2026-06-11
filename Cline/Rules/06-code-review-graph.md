@@ -1,14 +1,33 @@
+---
+paths:
+  - "src/main/java/**"
+  - "src/test/java/**"
+  - "**/*.java"
+  - "src/components/**"
+  - "src/pages/**"
+  - "src/hooks/**"
+  - "src/features/**"
+  - "src/layouts/**"
+  - "src/utils/**"
+  - "src/services/**"
+  - "src/store/**"
+  - "src/types/**"
+  - "**/*.tsx"
+  - "**/*.jsx"
+---
+
 # Code Review Graph First
 
 ## Goal
 
 Use Code Review Graph MCP to understand repository structure, change impact, blast radius, and review scope before reading source files.
 
-## Relationship to `00-tool-routing.md`
+## Boundary with CodeGraph
 
-`00-tool-routing.md` decides when Code Review Graph must be considered. This file defines the detailed Code Review Graph workflow once that routing decision is made.
+Use **Code Review Graph** for: change impact, blast radius, architecture overview, review scope, affected flows, test coverage gaps.
+Use **CodeGraph** for: symbol navigation, caller/callee lookup, execution flow tracing, reference tracing.
 
-Do not duplicate this whole workflow into always-active rules; keep the always-active gate short.
+Do NOT use `semantic_search_nodes` if `codegraph_search` already located the symbol — that is redundant.
 
 ## Preconditions
 
@@ -21,19 +40,6 @@ If Code Review Graph is unavailable, disabled, or uninitialized:
 - Fall back to targeted `search_files` / `read_file` usage.
 - Avoid repository-wide scans.
 
-## Scope
-
-Use Code Review Graph for:
-
-- Change impact analysis and blast radius.
-- Architecture and module overview.
-- Review scope for diffs or local changes.
-- Refactor planning across files/modules.
-- Identifying affected services, controllers, repositories, DTOs, components, tests, and downstream dependencies.
-- Developer onboarding to an unfamiliar repository.
-
-Do not use Code Review Graph for symbol navigation, caller/callee lookup, or reference tracing. Use CodeGraph for symbol-level analysis.
-
 ## When To Use
 
 Use Code Review Graph before manual source reads/searches for non-trivial tasks involving:
@@ -41,22 +47,31 @@ Use Code Review Graph before manual source reads/searches for non-trivial tasks 
 - Refactoring existing code.
 - Reviewing code changes.
 - Investigating large or unfamiliar repositories.
-- Understanding unfamiliar modules.
-- Estimating change impact.
-- Analyzing architecture, coupling, or blast radius.
+- Estimating change impact or blast radius.
 - Finding affected files, modules, services, components, or tests.
+- Understanding which execution paths are impacted by a change.
 
-For simple syntax fixes, small local edits, documentation-only changes, or symbol-level navigation, Code Review Graph is optional unless impact scope is unclear.
+For simple syntax fixes, small local edits, or symbol-level navigation, Code Review Graph is optional.
 
 ## Tool Selection
 
-Prefer tools in this order:
+| Tool | Use when |
+|---|---|
+| `get_minimal_context_tool` | First call for any non-trivial review/refactor/architecture task |
+| `detect_changes` | Reviewing code changes — gives risk-scored analysis |
+| `get_review_context` | Need source snippets for review — token-efficient |
+| `get_impact_radius` | Understanding blast radius of a change |
+| `get_affected_flows` | Finding which execution paths are impacted by a change |
+| `query_graph` | Tracing callers, callees, imports, tests, dependencies by pattern |
+| `semantic_search_nodes` | Finding functions/classes by name or keyword (use only if codegraph unavailable) |
+| `get_architecture_overview` | Understanding high-level codebase structure |
 
-1. `get_minimal_context_tool` — first call for non-trivial review/refactor/architecture tasks.
-2. `detect_changes_tool` — review existing diffs or validate changes after editing.
-3. `get_impact_radius_tool` — analyze known changed files or refactor targets.
-4. `get_review_context_tool` — focused review context when source snippets are needed.
-5. Architecture/community/flow tools — only when the task specifically requires that view.
+### `query_graph` patterns
+
+- `callers_of` — who calls this function/method
+- `callees_of` — what this function/method calls
+- `imports_of` — what this file/module imports
+- `tests_for` — which tests cover this symbol or file
 
 Build or update the graph only if it is missing or stale.
 
@@ -66,9 +81,10 @@ For non-trivial repository-level tasks:
 
 1. Run `get_minimal_context_tool` first.
 2. Identify changed files, target modules, or refactor targets.
-3. Run `get_impact_radius_tool` when targets are known.
-4. Run `detect_changes_tool` for existing diffs or after modifications.
-5. Only then read files, modify code, or run refactoring.
+3. Run `get_impact_radius` when targets are known.
+4. Run `get_affected_flows` to find impacted execution paths.
+5. Run `detect_changes` for existing diffs or after modifications.
+6. Only then read files, modify code, or run refactoring.
 
 ## Refactoring Workflow
 
@@ -76,10 +92,11 @@ Before refactoring:
 
 1. Run `get_minimal_context_tool`.
 2. Identify target files, classes, modules, and likely downstream dependencies.
-3. Run `get_impact_radius_tool` when targets are known.
-4. Create a focused extraction or modification plan.
-5. Refactor one responsibility at a time.
-6. Run `detect_changes_tool` after modifications when reviewing impact is useful.
+3. Run `get_impact_radius` when targets are known.
+4. Run `get_affected_flows` to understand which flows will be affected.
+5. Create a focused extraction or modification plan.
+6. Refactor one responsibility at a time.
+7. Run `detect_changes` after modifications to validate impact.
 
 Identify:
 
@@ -87,7 +104,7 @@ Identify:
 - Affected classes/components/services/controllers/repositories/DTOs.
 - Downstream dependencies.
 - Potential regression areas.
-- Relevant tests or test coverage gaps.
+- Relevant tests or test coverage gaps (`query_graph` pattern `tests_for`).
 
 ## Large Class Refactoring
 
@@ -106,8 +123,8 @@ Never immediately rewrite a large class.
 
 Prefer compact graph tools before reading large files:
 
-- `get_minimal_context_tool`.
-- `get_review_context_tool` with minimal detail when source snippets are needed.
+- `get_minimal_context_tool` first.
+- `get_review_context` with minimal detail when source snippets are needed.
 
 Avoid:
 
