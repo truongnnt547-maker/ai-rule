@@ -36,7 +36,7 @@ For large classes:
 - Identify extraction candidates.
 - Create an extraction plan.
 - Extract one responsibility at a time.
-- Validate after each extraction (dependencies, imports, compilation).
+- Validate after each extraction (dependencies, imports, and compile impact).
 - Never mix cleanup with behavior changes.
 - Refactor incrementally.
 
