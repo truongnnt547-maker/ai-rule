@@ -2,16 +2,28 @@
 
 ## Goal
 
-Structured pipeline for investigating bugs and errors using Grafana logs (vietcap MCP),
+Structured pipeline for investigating bugs and errors using Grafana logs (`log-query` MCP),
 CodeGraph, and Code Review Graph — in that order.
 
 ## Tool Boundary
 
-- `vietcap` — query Grafana logs to isolate the error (stack trace, class, method, line).
+- `log-query` — query Grafana logs to isolate the error (stack trace, class, method, line).
 - `codegraph` — locate the symbol in source after identifying it from logs.
 - `code-review-graph` — assess impact before writing the fix.
 
 Never use grep or file reads to find a class mentioned in a stack trace — use `codegraph_search`.
+
+## Preconditions
+
+Use `log-query` only when the MCP tool is available in the tool list.
+
+If `log-query` is unavailable:
+
+- Notify the user that log querying is unavailable.
+- Do not attempt to query logs through another tool.
+- Continue source analysis only if the user provides a log snippet, stack trace, exception class, or class/method/line context.
+
+If `codegraph` or `code-review-graph` is unavailable, follow their rule-specific fallback instructions and do not invent graph results.
 
 ## Token Optimization
 
@@ -24,7 +36,7 @@ For PROD: enforce maximum 5-minute windows due to high log volume.
 
 ## Environment Routing
 
-The `vietcap` tool contains data from multiple environments.
+The `log-query` tool contains data from multiple environments.
 **Always determine the target environment before executing any query.**
 
 | Environment | Use when user mentions |
@@ -45,7 +57,7 @@ Never guess the environment. Always inject the environment label explicitly into
 
 When investigating a bug or error, follow this order strictly:
 
-### Step 1 — Isolate the Error (`vietcap`)
+### Step 1 — Isolate the Error (`log-query`)
 
 - Query Grafana logs for the specific error, stack trace, or event failure.
 - Common contexts: Spring Boot stack traces, Axon command/event handler exceptions,
@@ -62,12 +74,12 @@ When investigating a bug or error, follow this order strictly:
 
 ### Step 3 — Assess Risk (`code-review-graph`)
 
-- Run `get_impact_radius` on the intended modification point before writing any fix.
-- Run `get_affected_flows` to identify execution paths that share the same logic.
+- Run `get_impact_radius_tool` on the intended modification point before writing any fix.
+- Run `get_affected_flows_tool` to identify execution paths that share the same logic.
 - Ensure the fix will not break other components relying on the same shared code.
 
 ### Step 4 — Implement & Verify
 
 - Write the fix based on root cause — avoid quick hacks.
-- Run `detect_changes` from code-review-graph to review your fix against the original bug context.
+- Run `detect_changes_tool` from code-review-graph to review your fix against the original bug context.
 - Do NOT run tests automatically — only run if the user explicitly requests it.

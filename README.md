@@ -1,10 +1,10 @@
-# Cline Rules
+# Cline Rules and Kiro Steering
 
-A collection of reusable `.clinerules` guidance for AI-assisted software engineering. These rules help AI coding agents (such as Cline) produce cleaner, safer, and more maintainable code by defining conventions, workflows, and constraints.
+A collection of reusable Cline rules and Kiro steering guidance for AI-assisted software engineering. These files help AI coding agents produce cleaner, safer, and more maintainable code by defining conventions, workflows, tool boundaries, and constraints.
 
 ## Prerequisites
 
-**MCP Server Requirement:** Rules 02 (CodeGraph) and 06 (Code Review Graph) require MCP servers to be installed, configured, and running. See [`Cline/Rules/00-mcp-configuration.md`](Cline/Rules/00-mcp-configuration.md) for installation and verification instructions.
+**MCP Server Requirement:** Some Cline rules and Kiro steering files depend on MCP servers such as CodeGraph, Code Review Graph, Spring Tools, log-query, and Headroom. For the Cline MCP baseline, see [`Cline/Rules/00-mcp-configuration.md`](Cline/Rules/00-mcp-configuration.md) for installation and verification instructions. Kiro steering files include their own availability boundaries and fallback behavior.
 
 ## Repository Layout
 
@@ -34,12 +34,12 @@ A collection of reusable `.clinerules` guidance for AI-assisted software enginee
 
 | File | Purpose |
 |---|---|
-| [`kiro/steering/code-review-graph.md`](kiro/steering/code-review-graph.md) | Code Review Graph MCP usage guide for impact analysis and review workflows |
-| [`kiro/steering/codegraph.md`](kiro/steering/codegraph.md) | CodeGraph MCP usage guide and tool-selection heuristics |
-| [`kiro/steering/headroom.md`](kiro/steering/headroom.md) | Headroom compression guidance for large non-code content |
-| [`kiro/steering/observability.md`](kiro/steering/observability.md) | Observability and debugging workflow using Grafana logs |
-| [`kiro/steering/spring-tools.md`](kiro/steering/spring-tools.md) | Spring Tools MCP usage guide for beans, wiring, endpoints, and diagnostics |
-| [`kiro/steering/workflow.md`](kiro/steering/workflow.md) | Task workflow rules for verification and completion |
+| [`kiro/steering/00-workflow.md`](kiro/steering/00-workflow.md) | Task workflow rules for verification and completion |
+| [`kiro/steering/01-headroom.md`](kiro/steering/01-headroom.md) | Headroom compression guidance for large non-source-code content |
+| [`kiro/steering/02-codegraph.md`](kiro/steering/02-codegraph.md) | CodeGraph MCP usage guide and tool-selection heuristics |
+| [`kiro/steering/03-code-review-graph.md`](kiro/steering/03-code-review-graph.md) | Code Review Graph MCP usage guide for impact analysis and review workflows |
+| [`kiro/steering/04-spring-tools.md`](kiro/steering/04-spring-tools.md) | Spring Tools MCP usage guide for beans, wiring, endpoints, and diagnostics |
+| [`kiro/steering/05-log-query-observability.md`](kiro/steering/05-log-query-observability.md) | Observability and debugging workflow using Grafana/log-query |
 
 ## Usage
 
@@ -48,7 +48,7 @@ Use the repository layout as-is:
 - Cline reads rules from `Cline/Rules/`
 - Kiro reads steering from `kiro/steering/`
 
-### Rule Application Order
+### Cline Rule Application Order
 
 1. **00-mcp-configuration.md** — Prerequisite: documents MCP server availability and verification
 2. **01-context-management.md** — Keep context small while gathering repository context
@@ -57,6 +57,14 @@ Use the repository layout as-is:
 5. **07-git-discipline.md**, **08-ignore-files.md**, **09-general-behavior.md** — Always active
 6. **10-security-and-privacy.md**, **11-dependency-and-build-discipline.md** — Scoped security/build checks that complement the graph-first workflow
 7. **12-observability.md** — Structured debugging workflow using Grafana logs, CodeGraph, and Code Review Graph
+
+### Kiro Steering Application Summary
+
+1. **00-workflow.md** — Always active task completion and verification policy
+2. **01-headroom.md** — Always active context compression policy when Headroom MCP tools are available
+3. **02-codegraph.md**, **03-code-review-graph.md** — File-match steering for graph-based code navigation, impact analysis, and review workflows
+4. **04-spring-tools.md** — File-match steering for Spring projects and Spring MCP tool selection
+5. **05-log-query-observability.md** — Always active observability workflow for Grafana/log-query debugging
 
 ## Key Principles
 
@@ -67,11 +75,13 @@ Use the repository layout as-is:
 
 ### MCP-Powered Graph-First Repository Understanding
 
-**Requires MCP servers** (see `00-mcp-configuration.md`):
+**Requires MCP servers when available** (see `00-mcp-configuration.md` for the Cline baseline):
 - **CodeGraph** (`@colbymchenry/codegraph`): symbol lookup, references, dependency graph, impact analysis at symbol level
 - **Code Review Graph** (`code-review-graph`): change impact, blast radius, architecture overview, developer onboarding
+- **Spring Tools**: Spring bean wiring, diagnostics, endpoint mappings, and version metadata in Kiro steering
+- **log-query** and **Headroom**: targeted observability and compression workflows in Kiro steering
 
-Use the graph-first rules as the primary decision point before manual source reads: `02-codegraph-first.md` for symbol understanding and `06-code-review-graph.md` for impact and review workflows.
+Use the graph-first rules as the primary decision point before manual source reads: `Cline/Rules/02-codegraph-first.md` and `kiro/steering/02-codegraph.md` for symbol understanding; `Cline/Rules/06-code-review-graph.md` and `kiro/steering/03-code-review-graph.md` for impact and review workflows.
 
 ### Incremental Refactoring
 - Modify at most 3 files per iteration.

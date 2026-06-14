@@ -40,6 +40,7 @@ These are generated, compiled, or dependency artifacts — not source code.
 - `*.war`
 - `*.ear`
 - `mvnw`, `mvnw.cmd` — Maven wrapper scripts (do not modify)
+- `vendor/` — vendored dependencies; do not scan unless explicitly requested
 
 ### IDE / OS
 
@@ -78,6 +79,8 @@ These are generated, compiled, or dependency artifacts — not source code.
 - `.vite/` — Vite cache
 - `.nuxt/` — Nuxt build output
 - `.svelte-kit/` — SvelteKit build output
+- `.angular/` — Angular cache/build metadata
+- `.expo/` — Expo generated state and cache
 
 ### Files
 
@@ -88,6 +91,14 @@ These are generated, compiled, or dependency artifacts — not source code.
 - `bun.lock` — lockfile; never modify manually
 - `*.map` — source maps (`.js.map`, `.css.map`)
 - `*.min.js`, `*.min.css` — minified bundles
+- `*.log` — log files; may contain sensitive runtime data
+
+## Infrastructure / Deployment Caches
+
+### Directories
+
+- `.serverless/` — Serverless Framework deployment artifacts
+- `.terraform/` — Terraform provider/modules cache and state-related metadata
 
 ## Python / Tooling Caches
 
@@ -128,10 +139,17 @@ These may contain credentials. Never read, log, summarize, or include them in co
 
 ---
 
+## Runtime Logs
+
+### Directories
+
+- `logs/` — runtime logs; may contain sensitive runtime data
+
 ## General Rules
 
 - If a task requires information from a build artifact, derive it from source code instead.
 - If a directory is listed above, do not scan it even partially.
 - If a file matches a pattern above, skip it without asking for confirmation.
-- Never suggest edits to lockfiles (`package-lock.json`, `pom.xml`-generated sections).
+- Never manually edit lockfiles.
+- Do not edit generated sections in build files if present.
 - `pom.xml` itself is source — it may be read and modified normally.

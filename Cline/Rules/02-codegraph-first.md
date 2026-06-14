@@ -25,12 +25,12 @@ Before using `read_file`, `search_files`, or grep for structural questions, chec
 
 ## Boundary with Code Review Graph
 
-Use **CodeGraph** for: navigation, symbol lookup, call tracing, execution flow, bug paths.
-Use **Code Review Graph** for: change impact, blast radius, architecture overview, review scope.
+Use **CodeGraph** for: symbol lookup, source exploration, caller/callee tracing, execution flow, bug paths, method/class logic, and symbol-level impact before a small refactor.
+Use **Code Review Graph** for: git diff / PR review, risk scoring, blast radius by changed files, affected execution flows, test coverage gaps, architecture overview, and large refactor planning.
 
-When in doubt: CodeGraph first to locate → Code Review Graph to assess impact.
+When in doubt: CodeGraph first to locate and understand the symbol → Code Review Graph to assess repository-level impact.
 
-Do NOT use `semantic_search_nodes` (code-review-graph) if `codegraph_search` already located the symbol.
+Do NOT use `semantic_search_nodes_tool` (code-review-graph) if `codegraph_search` already located the symbol.
 
 ## Preconditions
 
@@ -56,6 +56,7 @@ Use CodeGraph before manual source reads/searches for non-trivial tasks involvin
 - Tracing how X reaches Y through async/callback/React/JSX dynamic hops.
 - Debugging behavior in unfamiliar code.
 - Refactoring a known symbol.
+- Understanding symbol-level impact before a small refactor.
 
 For typo, formatting, documentation-only, or single-line local fixes, CodeGraph is optional.
 
@@ -67,7 +68,7 @@ For typo, formatting, documentation-only, or single-line local fixes, CodeGraph 
 | "What calls Y?" | `codegraph_callers` |
 | "What does Y call?" | `codegraph_callees` |
 | "How does X reach Y? / trace flow from X to Y" | `codegraph_callers` / `codegraph_callees` |
-| "What would break if I changed Z?" | `codegraph_impact` |
+| "What would break if I changed Z?" at the symbol level | `codegraph_impact` |
 | "Show Y's signature / source / docstring" | `codegraph_node` |
 | "See several related symbols' source at once" | `codegraph_explore` |
 | "What files exist under path/" | `codegraph_files` |
@@ -106,8 +107,9 @@ Before non-trivial symbol-level edits:
 2. Find the target symbol or relevant flow (`codegraph_search`, then `codegraph_callers` / `codegraph_callees` as needed).
 3. Inspect callers, callees, and dependencies.
 4. Estimate impacted symbols/classes/files.
-5. Create a focused modification plan.
-6. Only then read or edit source files.
+5. Use `codegraph_impact` when you need symbol-level impact before a small refactor.
+6. Create a focused modification plan.
+7. Only then read or edit source files.
 
 ## Fallback Strategy
 
@@ -131,6 +133,7 @@ Before refactoring a symbol:
 - Identify incoming references.
 - Identify outgoing dependencies.
 - Estimate symbol-level impact.
+- Escalate to Code Review Graph if you need blast radius, affected flows, or review scope across changed files.
 - Keep the change surgical.
 
 Never refactor blindly.

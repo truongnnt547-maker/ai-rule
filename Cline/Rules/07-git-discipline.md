@@ -22,7 +22,7 @@ Maintain a clean, traceable commit history during agentic coding sessions.
 
 ## Commit Checkpoints
 
-After each refactoring phase, suggest a commit checkpoint.
+After each refactoring phase, mention a commit checkpoint only in the completion or phase-reporting context.
 
 Suggested checkpoints:
 
@@ -31,7 +31,7 @@ Suggested checkpoints:
 - After fixing a failing compilation caused by a refactor.
 - Before starting the next extraction iteration.
 
-Never accumulate more than one phase of changes without a checkpoint suggestion.
+Never accumulate more than one phase of changes without noting the checkpoint in the phase report.
 
 ## Commit Message Format
 
@@ -59,7 +59,7 @@ fix(order): correct null check in OrderService.submit
 
 - Never create a commit unless the user explicitly requests it.
 - Never push unless the user explicitly requests it.
-- Suggest commit checkpoints after logical phases, but do not commit automatically.
+- Mention commit checkpoints after logical phases only in completion or phase-reporting context, but do not commit automatically.
 - Keep commit subjects concise, imperative, and specific.
 - Prefer lowercase scopes, for example `fix(order): validate submit input`.
 
