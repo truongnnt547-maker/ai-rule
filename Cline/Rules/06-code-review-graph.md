@@ -20,12 +20,12 @@ paths:
 
 ## Goal
 
-Use Code Review Graph MCP to understand repository structure, change impact, blast radius, and review scope before reading source files.
+Use Code Review Graph MCP to understand repository structure, git diff / PR review scope, repository-level impact, blast radius by changed files, and large refactor planning before reading source files.
 
 ## Boundary with CodeGraph
 
-Use **Code Review Graph** for: change impact, blast radius, architecture overview, review scope, affected flows, test coverage gaps.
-Use **CodeGraph** for: symbol navigation, caller/callee lookup, execution flow tracing, reference tracing.
+Use **Code Review Graph** for: git diff / PR review, risk scoring, blast radius by changed files, affected execution flows, test coverage gaps, architecture overview, and large refactor planning.
+Use **CodeGraph** for: symbol lookup, source exploration, caller/callee tracing, execution flow, method/class logic, and symbol-level impact before a small refactor.
 
 Do NOT use `semantic_search_nodes` if `codegraph_search` already located the symbol — that is redundant.
 
@@ -45,11 +45,12 @@ If Code Review Graph is unavailable, disabled, or uninitialized:
 Use Code Review Graph before manual source reads/searches for non-trivial tasks involving:
 
 - Refactoring existing code.
-- Reviewing code changes.
+- Reviewing git diff / PR changes.
 - Investigating large or unfamiliar repositories.
-- Estimating change impact or blast radius.
+- Estimating repository-level impact or blast radius across changed files.
 - Finding affected files, modules, services, components, or tests.
 - Understanding which execution paths are impacted by a change.
+- Planning a large refactor.
 
 For simple syntax fixes, small local edits, or symbol-level navigation, Code Review Graph is optional.
 
@@ -58,7 +59,7 @@ For simple syntax fixes, small local edits, or symbol-level navigation, Code Rev
 | Tool | Use when |
 |---|---|
 | `get_minimal_context_tool` | First call for any non-trivial review/refactor/architecture task |
-| `detect_changes` | Reviewing code changes — gives risk-scored analysis |
+| `detect_changes` | Reviewing git diff / PR changes — gives risk-scored analysis |
 | `get_review_context` | Need source snippets for review — token-efficient |
 | `get_impact_radius` | Understanding blast radius of a change |
 | `get_affected_flows` | Finding which execution paths are impacted by a change |

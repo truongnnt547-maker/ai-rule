@@ -41,10 +41,10 @@ Use codegraph for **structural** questions — what calls what, what would break
 The MCP server returns "not initialized." Ask the user: *"I notice this project doesn't have CodeGraph initialized. Want me to run `codegraph init -i` to build the index?"*
 
 ### Boundary with code-review-graph (STRICT HIERARCHY)
-- **ALWAYS prefer `codegraph` for:** Core development tasks, code navigation, symbol lookups, call hierarchies (`callers`/`callees`), structural impact analysis (`codegraph_impact`), and exploring related implementation symbols.
-- **DO NOT use `codegraph` for:** Git pull request audits, change risk scoring, or test coverage mapping. Delegate those strictly to `code-review-graph`.
+- **ALWAYS prefer `codegraph` for:** Core development tasks, code navigation, symbol lookups, source exploration, call hierarchies (`callers`/`callees`), method/class logic, and symbol-level impact analysis before a small refactor (`codegraph_impact`).
+- **DO NOT use `codegraph` for:** Git pull request audits, change risk scoring, blast radius by changed files, affected execution flows, test coverage mapping, or architecture overview. Delegate those strictly to `code-review-graph`.
 - **Rule of Thumb:**
-  - If the user asks *"How does this feature/system work?"* or *"What does this break structurally?"* $\rightarrow$ Use `codegraph`.
+  - If the user asks *"How does this feature/system work?"* or *"What does this break at the symbol level?"* $\rightarrow$ Use `codegraph`.
   - If the user asks *"Review my current git changes"* or *"What are the risks of my PR?"* $\rightarrow$ Use `code-review-graph`.
 
 ### Boundary with Spring Tools (STRICT HIERARCHY)
