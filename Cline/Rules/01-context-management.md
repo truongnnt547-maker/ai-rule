@@ -10,7 +10,7 @@ Minimize context usage and avoid repeatedly loading large files.
 - Never load an entire repository.
 - Read only the files required for the current task.
 - Read only the relevant sections of large files.
-- Summarize findings before moving to the next step.
+- Summarize findings when useful or before expanding context significantly.
 - Reuse previous analysis instead of rereading files.
 
 ## Context Checkpoint

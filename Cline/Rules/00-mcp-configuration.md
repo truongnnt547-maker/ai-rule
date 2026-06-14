@@ -38,11 +38,13 @@ The following MCP servers are required by this ruleset:
 **code-review-graph** (used in rule 06):
 - `build_or_update_graph_tool` — Initialise or update the code knowledge graph
 - `get_minimal_context_tool` — Ultra-compact entry point (~100 tokens)
-- `get_impact_radius_tool` — Blast radius analysis
 - `detect_changes_tool` — Risk-scored change detection
 - `get_review_context_tool` — Token-efficient review context
-- `onboard_developer` — Repository onboarding via prompt
-- `review_changes` — Pre-commit review workflow via prompt
+- `get_impact_radius_tool` — Blast radius analysis
+- `get_affected_flows_tool` — Affected execution flow analysis
+- `query_graph_tool` — Relationship queries such as callers, callees, imports, and tests
+- `semantic_search_nodes_tool` — Keyword/semantic search when CodeGraph is unavailable
+- `get_architecture_overview_tool` — High-level architecture overview
 
 **codegraph** (used in rule 02) — package: `@colbymchenry/codegraph`:
 - `codegraph_explore` — Primary tool: natural-language exploration with verbatim source

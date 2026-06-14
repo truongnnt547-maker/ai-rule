@@ -30,7 +30,7 @@ Use **Code Review Graph** for: git diff / PR review, risk scoring, blast radius 
 
 When in doubt: CodeGraph first to locate and understand the symbol → Code Review Graph to assess repository-level impact.
 
-Do NOT use `semantic_search_nodes` (code-review-graph) if `codegraph_search` already located the symbol.
+Do NOT use `semantic_search_nodes_tool` (code-review-graph) if `codegraph_search` already located the symbol.
 
 ## Preconditions
 

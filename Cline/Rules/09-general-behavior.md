@@ -86,7 +86,7 @@ Weak criteria ("make it work") require constant clarification.
 
 - Do NOT run tests or linters automatically after completing a task.
 - Compile/build checks may run automatically when they are the relevant verification step.
-- Only run tests when explicitly asked by the user.
+- Only write or run tests when explicitly asked by the user or when the task explicitly requires tests.
 - A task is considered done when the code changes are made.
 - If verification cannot be run, state exactly why.
 - Do not claim tests passed unless they were actually executed.

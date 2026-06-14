@@ -17,7 +17,7 @@ Phase 2
 
 - Extract one responsibility.
 - Validate impact.
-- Verify: compilation succeeds, dependencies are correct; run tests only after user confirmation.
+- Verify: compilation succeeds when the command is known, scoped, and non-destructive; dependencies are correct; run tests only after user confirmation.
 
 Phase 3
 
@@ -63,7 +63,7 @@ After each extraction:
 - Verify dependencies.
 - Verify imports.
 - Verify constructor wiring.
-- Verify compile impact directly; run test commands only after user confirmation.
+- Verify compile impact directly when the command is known, scoped, and non-destructive; run test commands only after user confirmation.
 
 Only then continue.
 

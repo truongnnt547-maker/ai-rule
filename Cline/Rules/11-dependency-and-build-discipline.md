@@ -45,7 +45,7 @@ Do not use this always-active dependency rule as a reason to skip CodeGraph or C
 
 ## Validation After Dependency/Build Changes
 
-- Recommend the smallest relevant checks after dependency or build config changes.
+- State the smallest relevant validation command or validation status after dependency or build config changes.
 - Compile/build checks may run automatically when they are the relevant verification step.
 - Run targeted tests (e.g., `npm test -- <scope>` or `mvn -pl <module> test`) only after explicit user confirmation.
 - If validation is not run, state why and what should be run by the user.

@@ -68,7 +68,7 @@ If the same error recurs after a fix:
 
 ## Exceptions
 
-Reading the whole file is acceptable only when:
+Reading the whole file is acceptable only when ignore-file, security, and secrets rules do not prohibit it, and:
 
 - The user explicitly asks for a full-file review.
 - The file is only slightly above the threshold (≤350 lines) and structurally simple.
